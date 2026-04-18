@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BariAccess™ — Mark's Recovery Story</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --band1: #1B5E20;
+    --band2: #2E7D32;
+    --band3: #66BB6A;
+    --band4: #F57C00;
+    --band5: #E65100;
+    --band6: #BF360C;
+    --band7: #B71C1C;
+    --bg: #F5F5F0;
+    --card: #FFFFFF;
+    --text: #1A1A1A;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    --ollie-bg: #EEF2FF;
+    --ollie-border: #C7D2FE;
+    --accent: #4F46E5;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #E8E8E0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .phone-frame {
+    width: 390px;
+    min-height: 844px;
+    background: var(--bg);
+    border-radius: 44px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    background: var(--bg);
+    padding: 12px 24px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--bg);
+    padding: 4px 20px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .three-dots {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .three-dots span {
+    width: 5px;
+    height: 5px;
+    background: #4F46E5;
+    border-radius: 50%;
+  }
+
+  .brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    color: var(--text);
+  }
+
+  .brand sup {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+  }
+
+  .q-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .q-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #374151;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .badge-count {
+    background: #EF4444;
+    color: white;
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* DAY INDICATOR */
+  .day-indicator {
+    background: rgba(79,70,229,0.1);
+    border-radius: 20px;
+    padding: 4px 14px;
+    margin: 0 20px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .day-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all 0.4s;
+    flex-shrink: 0;
+  }
+
+  .day-dot.active {
+    background: #4F46E5;
+    transform: scale(1.3);
+  }
+
+  .day-dot.past {
+    background: #9CA3AF;
+  }
+
+  .day-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4F46E5;
+    letter-spacing: 0.5px;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  /* RHYTHM BOARD — TOP 60% */
+  .rhythm-board {
+    flex: 1;
+    padding: 0 16px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* BEACON TAKEOVER — fills entire rhythm board */
+  .beacon-takeover {
+    position: absolute;
+    inset: 0;
+    background: #0D0D0D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+    z-index: 10;
+    padding: 12px 20px 8px;
+    overflow: hidden;
+  }
+
+  .beacon-takeover.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .beacon-label-top {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #6B7280;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ISE FUNNEL ANIMATION */
+  .ise-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .ise-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #9CA3AF;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  /* SCORE BALL */
+  .score-ball {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #FFFFFF, #C0C0C0);
+    box-shadow: 0 4px 16px rgba(255,255,255,0.2), inset 0 -2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1A1A1A;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    transition: top 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    top: 0px;
+  }
+
+  /* FUNNEL SVG */
+  .funnel-wrap {
+    width: 80px;
+    height: 60px;
+    margin: 0 auto 0;
+    position: relative;
+    z-index: 15;
+  }
+
+  /* BAND STACK */
+  .band-stack {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 0;
+  }
+
+  .ise-band {
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.6s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ise-band.lit {
+    color: white;
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 0 20px rgba(255,255,255,0.15);
+    animation: band-glow 2s infinite;
+  }
+
+  @keyframes band-glow {
+    0%, 100% { box-shadow: 0 0 15px rgba(255,255,255,0.15); }
+    50% { box-shadow: 0 0 30px rgba(255,255,255,0.3); }
+  }
+
+  .ise-band-score {
+    font-size: 9px;
+    opacity: 0.6;
+  }
+
+  .ise-band-name {
+    font-size: 11px;
+    font-weight: 700;
+    flex: 1;
+    text-align: center;
+    transition: all 0.4s;
+    letter-spacing: 0.3px;
+  }
+
+  .ise-band.lit .ise-band-name {
+    animation: name-appear 0.5s ease forwards;
+  }
+
+  @keyframes name-appear {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .pre-signal-alert {
+    background: rgba(245,124,0,0.15);
+    border: 1px solid rgba(245,124,0,0.4);
+    border-radius: 10px;
+    padding: 6px 12px;
+    color: #F57C00;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    animation: blink-alert 1.5s infinite;
+    margin-top: 8px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  @keyframes blink-alert {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @keyframes pulse-band {
+    0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+    50% { box-shadow: 0 0 35px rgba(255,255,255,0.5); }
+  }
+
+  /* NORMAL RHYTHM BOARD CONTENT */
+  .rb-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: opacity 0.6s ease;
+  }
+
+  .rb-content.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* TOP ROW — HRV + EDUCATIONAL */
+  .top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .hrv-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .hrv-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .hrv-delta {
+    font-size: 11px;
+    font-weight: 600;
+    float: right;
+    transition: color 0.5s;
+  }
+
+  .hrv-value {
+    font-size: 32px;
+    font-weight: 300;
+    color: #2E7D32;
+    line-height: 1;
+    transition: color 0.5s;
+  }
+
+  .hrv-unit {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .hrv-chart {
+    height: 40px;
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .hrv-chart svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hrv-week {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .hrv-day {
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .edu-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .edu-tag {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .edu-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 4px 0;
+    line-height: 1.3;
+  }
+
+  .edu-sub {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .explore-btn {
+    display: inline-block;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  /* BIOMETRICS PANEL — shows Day 2-3 */
+  .biometrics-panel {
+    background: #0F0F0F;
+    border-radius: 16px;
+    padding: 14px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .biometrics-panel.visible {
+    display: flex;
+  }
+
+  .bm-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #6B7280;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .bm-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bm-label {
+    font-size: 11px;
+    color: #9CA3AF;
+    width: 90px;
+    flex-shrink: 0;
+  }
+
+  .bm-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: #1F1F1F;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bm-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  .bm-value {
+    font-size: 11px;
+    font-weight: 600;
+    width: 50px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bm-up { color: #EF4444; }
+  .bm-down { color: #EF4444; }
+  .bm-ok { color: #22C55E; }
+
+  /* MEMORY SNAP */
+  .memory-snap {
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    height: 120px;
+    transition: all 0.5s;
+  }
+
+  .memory-snap-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .memory-snap-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    gap: 2px;
+  }
+
+  .snap-img {
+    background: linear-gradient(135deg, #374151, #6B7280);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+
+  .snap-time {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    color: rgba(255,255,255,0.7);
+    font-size: 10px;
+  }
+
+  .snap-viewall {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  /* MEMORY SNAP FINAL — camera flash */
+  .memory-final {
+    background: linear-gradient(135deg, #1A1A2E, #16213E);
+    border-radius: 16px;
+    padding: 16px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(79,70,229,0.3);
+  }
+
+  .memory-final.visible {
+    display: flex;
+  }
+
+  .memory-final-icon {
+    font-size: 28px;
+    animation: camera-flash 0.5s ease;
+  }
+
+  @keyframes camera-flash {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .memory-final-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+  }
+
+  .memory-final-sub {
+    font-size: 10px;
+    color: #6B7280;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ROUTINE BAR */
+  .routine-bar-wrap {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .routine-segments {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .segment {
+    flex: 1;
+    height: 10px;
+    border-radius: 5px;
+    background: #E5E7EB;
+    transition: all 0.5s;
+    position: relative;
+  }
+
+  .segment.active-seg {
+    background: #2E7D32;
+  }
+
+  .segment.warning-seg {
+    background: #F57C00;
+    animation: segment-pulse 1.5s infinite;
+  }
+
+  .segment.danger-seg {
+    background: #B71C1C;
+    animation: segment-pulse 1s infinite;
+  }
+
+  @keyframes segment-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .segment-labels {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .seg-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .gym-indicator {
+    font-size: 10px;
+    color: #F57C00;
+    font-weight: 600;
+    text-align: right;
+    margin-top: 4px;
+    display: none;
+  }
+
+  .gym-indicator.visible {
+    display: block;
+  }
+
+  /* CONSTELLATION PANEL — BOTTOM STATIC */
+  .constellation-panel {
+    flex-shrink: 0;
+    background: var(--bg);
+    padding: 0 16px 8px;
+  }
+
+  /* ROW 1 — SCORES */
+  .scores-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+    transition: opacity 0.5s;
+  }
+
+  .score-tile {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 8px;
+    border: 1.5px solid transparent;
+    transition: all 0.5s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .score-tile.flagged {
+    border-color: #F57C00;
+  }
+
+  .score-tile.warning {
+    border-color: #EF4444;
+    animation: tile-pulse 1.5s infinite;
+  }
+
+  @keyframes tile-pulse {
+    0%, 100% { border-color: #EF4444; }
+    50% { border-color: #F97316; }
+  }
+
+  .score-tile-label {
+    font-size: 9px;
+    color: var(--muted);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .score-tile-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    transition: color 0.5s;
+  }
+
+  /* OLLIE PANEL */
+  .ollie-panel {
+    background: var(--ollie-bg);
+    border: 1.5px solid var(--ollie-border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .ollie-banner {
+    background: white;
+    border-bottom: 1px solid var(--ollie-border);
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s;
+    line-height: 1.3;
+  }
+
+  .ollie-banner.max-mode {
+    color: #1F2937;
+    background: #F3F4F6;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .ollie-body {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 80px;
+  }
+
+  .avatar-group {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .avatar-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    opacity: 0.3;
+    transition: all 0.4s;
+    border: 2px solid transparent;
+  }
+
+  .avatar-icon.ollie-av {
+    background: #DDD6FE;
+  }
+
+  .avatar-icon.max-av {
+    background: #F3F4F6;
+  }
+
+  .avatar-icon.speaking {
+    opacity: 1;
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(79,70,229,0.3);
+    animation: avatar-glow 2s infinite;
+  }
+
+  .avatar-icon.max-speaking {
+    opacity: 1;
+    border-color: #374151;
+    box-shadow: 0 0 12px rgba(55,65,81,0.3);
+  }
+
+  @keyframes avatar-glow {
+    0%, 100% { box-shadow: 0 0 12px rgba(79,70,229,0.3); }
+    50% { box-shadow: 0 0 20px rgba(79,70,229,0.5); }
+  }
+
+  .ollie-figure {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #F5F5F5, #D1D5DB);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: all 0.5s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .ollie-figure.alert-mode {
+    background: radial-gradient(circle at 35% 35%, #FEF3C7, #F59E0B);
+    animation: ollie-alert 1s infinite;
+  }
+
+  .ollie-figure.max-mode {
+    background: radial-gradient(circle at 35% 35%, #F3F4F6, #374151);
+  }
+
+  .ollie-figure.happy-mode {
+    background: radial-gradient(circle at 35% 35%, #D1FAE5, #10B981);
+  }
+
+  @keyframes ollie-alert {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .chat-btn {
+    background: white;
+    border: 1.5px solid var(--ollie-border);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    cursor: pointer;
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    flex-shrink: 0;
+    padding: 8px 16px 16px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  .nav-item.nav-active {
+    opacity: 1;
+  }
+
+  .nav-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .nav-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .beacon-nav {
+    color: #2E7D32;
+    font-weight: 700;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width linear;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* FAB WEDGES animation */
+  .fab-wedges {
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 16px;
+  }
+
+  .fab-wedges.visible {
+    display: flex;
+  }
+
+  .fab-wedge {
+    background: #EEF2FF;
+    border: 1.5px solid #C7D2FE;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #4F46E5;
+    animation: wedge-in 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes wedge-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SLIDER PANEL */
+  .slider-panel {
+    background: #1A1A2E;
+    border-top: 1px solid rgba(79,70,229,0.3);
+    padding: 10px 16px 8px;
+    flex-shrink: 0;
+    display: none;
+  }
+
+  .slider-panel.visible {
+    display: block;
+  }
+
+  .slider-panel-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #6B7280;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .slider-panel-title span {
+    color: #4F46E5;
+    font-size: 10px;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .slider-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9CA3AF;
+    width: 28px;
+    flex-shrink: 0;
+  }
+
+  .slider-input {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: #374151;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
+  }
+
+  .slider-val {
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .sc-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sc-label {
+    font-size: 10px;
+    color: #6B7280;
+    font-weight: 600;
+  }
+
+  .sc-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    transition: color 0.3s;
+  }
+
+  .sc-band-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    color: white;
+    transition: background 0.3s;
+  }
+
+  /* TRANSITION OVERLAY */
+  .day-transition {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    z-index: 50;
+    pointer-events: none;
+    transition: background 0.3s;
+  }
+
+  .day-transition.flash {
+    background: rgba(0,0,0,0.15);
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="day-transition" id="dayTransition"></div>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span id="timeDisplay">17:04</span>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <span>📶</span><span>🔋</span>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="three-dots">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="brand">BARIACCESS<sup>™</sup></div>
+    <div class="q-badge">
+      <div style="background:rgba(79,70,229,0.15);border:1px solid rgba(79,70,229,0.3);border-radius:12px;padding:3px 10px;font-size:10px;font-weight:700;color:#4F46E5;cursor:pointer;" onclick="togglePause()" id="headerPauseBtn">⏸ Demo</div>
+      <div class="q-icon">Q</div>
+      <div class="badge-count" id="badgeCount">3</div>
+    </div>
+  </div>
+
+  <!-- DAY INDICATOR -->
+  <div class="day-indicator">
+    <div class="day-dot" id="dot0"></div>
+    <div class="day-dot" id="dot1"></div>
+    <div class="day-dot" id="dot2"></div>
+    <div class="day-dot" id="dot3"></div>
+    <div class="day-dot" id="dot4"></div>
+    <div class="day-dot" id="dot5"></div>
+    <div class="day-dot" id="dot6"></div>
+    <span class="day-label" id="dayLabel">Day 1 of 7</span>
+  </div>
+
+  <!-- RHYTHM BOARD -->
+  <div class="rhythm-board">
+
+    <!-- BEACON TAKEOVER — ISE Funnel Animation -->
+    <div class="beacon-takeover" id="beaconTakeover">
+      <div class="beacon-label-top" id="beaconTopLabel">⚠ RECOVERY COMPROMISED</div>
+
+      <div class="ise-container">
+        <div class="ise-title">Identity State Expressions</div>
+
+        <!-- Score ball starts above funnel, drops through -->
+        <div class="score-ball" id="scoreBall">79</div>
+
+        <!-- Funnel SVG -->
+        <div class="funnel-wrap" id="funnelWrap">
+          <svg viewBox="0 0 80 60" width="80" height="60">
+            <!-- Funnel body -->
+            <polygon points="5,5 75,5 55,35 25,35" fill="url(#funnelGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <!-- Funnel neck -->
+            <rect x="33" y="35" width="14" height="20" rx="3" fill="url(#neckGrad)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <!-- Funnel rim highlight -->
+            <line x1="5" y1="5" x2="75" y2="5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <defs>
+              <linearGradient id="funnelGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#D1D5DB"/>
+                <stop offset="100%" stop-color="#9CA3AF"/>
+              </linearGradient>
+              <linearGradient id="neckGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#9CA3AF"/>
+                <stop offset="100%" stop-color="#6B7280"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- 7 Beacon Bands -->
+        <div class="band-stack" id="bandStack">
+          <div class="ise-band" id="band0" style="background:rgba(27,94,32,0.15);border-color:rgba(27,94,32,0.3)">
+            <span class="ise-band-score">95–100</span>
+            <span class="ise-band-name">Strong Green</span>
+            <span class="ise-band-score">ISE-4</span>
+          </div>
+          <div class="ise-band" id="band1" style="background:rgba(46,125,50,0.15);border-color:rgba(46,125,50,0.3)">
+            <span class="ise-band-score">85–94</span>
+            <span class="ise-band-name">Med Green</span>
+            <span class="ise-band-score">ISE-4</span>
+          </div>
+          <div class="ise-band" id="band2" style="background:rgba(102,187,106,0.12);border-color:rgba(102,187,106,0.25)">
+            <span class="ise-band-score">80–84</span>
+            <span class="ise-band-name">Faint Green ⚠</span>
+            <span class="ise-band-score">ISE-2</span>
+          </div>
+          <div class="ise-band" id="band3" style="background:rgba(245,124,0,0.12);border-color:rgba(245,124,0,0.25)">
+            <span class="ise-band-score">70–79</span>
+            <span class="ise-band-name">Light Orange</span>
+            <span class="ise-band-score">ISE-2</span>
+          </div>
+          <div class="ise-band" id="band4" style="background:rgba(230,81,0,0.12);border-color:rgba(230,81,0,0.25)">
+            <span class="ise-band-score">65–69</span>
+            <span class="ise-band-name">Overload &amp; Recovery</span>
+            <span class="ise-band-score">ISE-3</span>
+          </div>
+          <div class="ise-band" id="band5" style="background:rgba(191,54,12,0.12);border-color:rgba(191,54,12,0.25)">
+            <span class="ise-band-score">60–64</span>
+            <span class="ise-band-name">Dark Orange</span>
+            <span class="ise-band-score">ISE-1</span>
+          </div>
+          <div class="ise-band" id="band6" style="background:rgba(183,28,28,0.12);border-color:rgba(183,28,28,0.25)">
+            <span class="ise-band-score">&lt;60</span>
+            <span class="ise-band-name">Red — Clinical</span>
+            <span class="ise-band-score">ISE-0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pre-signal-alert" id="beaconAlert">⚠ APPROACHING CLINICAL INTERSECTION</div>
+    </div>
+
+    <!-- NORMAL CONTENT -->
+    <div class="rb-content" id="rbContent">
+
+      <!-- TOP ROW -->
+      <div class="top-row">
+        <div class="hrv-card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="hrv-label">HRV</div>
+            <div class="hrv-delta" id="hrvDelta" style="color:#EF4444">-4 ms</div>
+          </div>
+          <div class="hrv-value" id="hrvValue">58 <span class="hrv-unit">ms</span></div>
+          <div class="hrv-chart">
+            <svg viewBox="0 0 140 40" preserveAspectRatio="none" id="hrvChart">
+              <polyline id="hrvLine" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="0,20 20,18 40,15 60,20 80,22 100,25 120,30 140,32"/>
+            </svg>
+          </div>
+          <div class="hrv-week">
+            <span class="hrv-day">S</span><span class="hrv-day">M</span>
+            <span class="hrv-day">T</span><span class="hrv-day">W</span>
+            <span class="hrv-day">T</span><span class="hrv-day">F</span>
+            <span class="hrv-day">S</span>
+          </div>
+        </div>
+        <div class="edu-card" id="eduCard">
+          <div>
+            <div class="edu-tag">EDUCATIONAL</div>
+            <div class="edu-title" id="eduTitle">Daily learning</div>
+            <div class="edu-sub" id="eduSub">Protocols, quizzes, and guided reads from your care team.</div>
+          </div>
+          <div class="explore-btn" id="eduBtn">Explore ›</div>
+        </div>
+      </div>
+
+      <!-- BIOMETRICS PANEL (Day 2+) -->
+      <div class="biometrics-panel" id="biometricsPanel">
+        <div class="bm-title">📊 Signal Alert</div>
+        <div class="bm-row">
+          <div class="bm-label">HRV</div>
+          <div class="bm-bar-bg"><div class="bm-bar-fill bm-down" id="bm-hrv" style="width:35%;background:#EF4444"></div></div>
+          <div class="bm-value bm-down" id="bm-hrv-val">42 ms ↓</div>
+        </div>
+        <div class="bm-row">
+          <div class="bm-label">Sleep Score</div>
+          <div class="bm-bar-bg"><div class="bm-bar-fill" id="bm-sleep" style="width:76%;background:#F59E0B"></div></div>
+          <div class="bm-value" id="bm-sleep-val" style="color:#F59E0B">76 ↓</div>
+        </div>
+        <div class="bm-row">
+          <div class="bm-label">Temperature</div>
+          <div class="bm-bar-bg"><div class="bm-bar-fill bm-up" id="bm-temp" style="width:65%;background:#EF4444"></div></div>
+          <div class="bm-value bm-up" id="bm-temp-val">99.2°F ↑</div>
+        </div>
+        <div class="bm-row">
+          <div class="bm-label">Resting HR</div>
+          <div class="bm-bar-bg"><div class="bm-bar-fill bm-up" id="bm-hr" style="width:58%;background:#EF4444"></div></div>
+          <div class="bm-value bm-up" id="bm-hr-val">74 bpm ↑</div>
+        </div>
+      </div>
+
+      <!-- MEMORY SNAP -->
+      <div class="memory-snap" id="memorySnap">
+        <div class="memory-snap-label">✦ MEMORY SNAP</div>
+        <div class="memory-snap-inner">
+          <div class="snap-img">🎻</div>
+          <div class="snap-img" style="background:linear-gradient(135deg,#4B5563,#9CA3AF)">🎶</div>
+        </div>
+        <div class="snap-time">19h ago</div>
+        <div class="snap-viewall">View all ›</div>
+      </div>
+
+      <!-- MEMORY FINAL -->
+      <div class="memory-final" id="memoryFinal">
+        <div class="memory-final-icon">📸</div>
+        <div class="memory-final-text">MemorySnap™ Captured</div>
+        <div class="memory-final-sub">This recovery pattern is now part of your health memory. Your body learned something important.</div>
+      </div>
+
+      <!-- ROUTINE BAR -->
+      <div class="routine-bar-wrap">
+        <div class="routine-segments">
+          <div class="segment" id="seg-morning"></div>
+          <div class="segment" id="seg-midday"></div>
+          <div class="segment" id="seg-evening"></div>
+        </div>
+        <div class="segment-labels">
+          <span class="seg-label">Morning</span>
+          <span class="seg-label">Midday</span>
+          <span class="seg-label">Evening</span>
+        </div>
+        <div class="gym-indicator" id="gymIndicator">🏋️ Gym at 7PM — unusual time</div>
+      </div>
+
+    </div><!-- end rb-content -->
+  </div><!-- end rhythm-board -->
+
+  <!-- FAB WEDGES -->
+  <div class="fab-wedges" id="fabWedges">
+    <div class="fab-wedge" style="animation-delay:0.1s">💧 Hydration</div>
+    <div class="fab-wedge" style="animation-delay:0.3s">🥩 Protein</div>
+    <div class="fab-wedge" style="animation-delay:0.5s">😴 Sleep 9:20PM</div>
+    <div class="fab-wedge" style="animation-delay:0.7s">🏃 Exercise before 3PM</div>
+  </div>
+
+  <!-- SLIDER PANEL — Version 3 live demo control -->
+  <div class="slider-panel" id="sliderPanel">
+    <div class="slider-panel-title">
+      LIVE DEMO — Move sliders to show deviation
+      <span id="pauseBtn" onclick="togglePause()" style="cursor:pointer;background:rgba(79,70,229,0.2);padding:2px 8px;border-radius:10px;">⏸ Pause</span>
+    </div>
+    <div class="slider-row">
+      <div class="slider-label">V1</div>
+      <input type="range" class="slider-input" id="sl-v1" min="0" max="100" value="96" oninput="updateSliders()">
+      <div class="slider-val" id="sv-v1">96</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-label">V2</div>
+      <input type="range" class="slider-input" id="sl-v2" min="0" max="100" value="90" oninput="updateSliders()">
+      <div class="slider-val" id="sv-v2">90</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-label">V3</div>
+      <input type="range" class="slider-input" id="sl-v3" min="0" max="100" value="93" oninput="updateSliders()">
+      <div class="slider-val" id="sv-v3">93</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-label" style="color:#F57C00">V4</div>
+      <input type="range" class="slider-input" id="sl-v4" min="0" max="100" value="90"
+        style="background:linear-gradient(to right,#F57C00 90%,#374151 90%)"
+        oninput="updateSliders()">
+      <div class="slider-val" id="sv-v4" style="color:#F57C00">90</div>
+    </div>
+    <div class="sc-display">
+      <div class="sc-label">SC SCORE</div>
+      <div class="sc-value" id="scLiveVal">92.1</div>
+      <div class="sc-band-pill" id="scBandPill" style="background:#2E7D32">Band 2 — Med Green</div>
+    </div>
+  </div>
+
+  <!-- CONSTELLATION PANEL -->
+  <div class="constellation-panel">
+
+    <!-- SCORES ROW -->
+    <div class="scores-row" id="scoresRow">
+      <div class="score-tile" id="tile-rr">
+        <div class="score-tile-label">R&R</div>
+        <div class="score-tile-value" id="val-rr">88</div>
+      </div>
+      <div class="score-tile" id="tile-hs">
+        <div class="score-tile-label">Healthspan</div>
+        <div class="score-tile-value" id="val-hs">85</div>
+      </div>
+      <div class="score-tile" id="tile-bp">
+        <div class="score-tile-label">Blueprint</div>
+        <div class="score-tile-value" id="val-bp">82</div>
+      </div>
+      <div class="score-tile" id="tile-ic">
+        <div class="score-tile-label">Inner Circle</div>
+        <div class="score-tile-value" id="val-ic">51</div>
+      </div>
+    </div>
+
+    <!-- OLLIE PANEL -->
+    <div class="ollie-panel">
+      <div class="ollie-banner" id="ollieBanner">
+        Good evening, Mark! How was your day?
+      </div>
+      <div class="ollie-body">
+        <div class="avatar-group">
+          <div class="avatar-icon ollie-av speaking" id="ollieAv">🫧</div>
+          <div class="avatar-icon max-av" id="maxAv">🔬</div>
+        </div>
+        <div class="ollie-figure" id="ollieFigure">🫧</div>
+        <div class="chat-btn">Chat ›</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item">
+      <div class="nav-icon">🎬</div>
+      <div class="nav-label">FAB</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">⚡</div>
+      <div class="nav-label">ITB</div>
+    </div>
+    <div class="nav-item nav-active">
+      <div class="nav-icon beacon-nav">◎</div>
+      <div class="nav-label beacon-nav">BEACON</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🔄</div>
+      <div class="nav-label">ROUTINE</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">📈</div>
+      <div class="nav-label">PROD</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">⏳</div>
+      <div class="nav-label">PARK</div>
+    </div>
+  </div>
+
+</div><!-- end phone-frame -->
+
+<script>
+const DAYS = [
+  {
+    // DAY 1 — Routine change. Evening gym. Ollie notices.
+    label: 'Day 1 — Routine Change',
+    time: '19:15',
+    hrv: 58, hrvDelta: '-2 ms', hrvColor: '#F59E0B',
+    hrvPoints: '0,18 20,17 40,16 60,18 80,20 100,22 120,26 140,28',
+    rrScore: 88, hsScore: 85, bpScore: 82, icScore: 51,
+    rrFlag: false, beaconMode: false,
+    biometrics: false,
+    memorySnap: true, memoryFinal: false,
+    segMorning: 'active-seg', segMidday: '', segEvening: 'warning-seg',
+    gymIndicator: true,
+    fabWedges: false,
+    ollie: true,
+    ollieBanner: 'Mark, your gym moved to 7PM tonight. Intentional? Hydrate well and sleep early.',
+    ollieFigure: '🫧',
+    ollieMode: '',
+    ollieSpeak: true, maxSpeak: false,
+    badge: '3',
+    eduTitle: 'Evening Exercise & Sleep',
+    eduSub: 'How timing affects your recovery score.',
+  },
+  {
+    // DAY 2 — Signals appear. HRV drops. Sleep drops.
+    label: 'Day 2 — First Signals',
+    time: '07:30',
+    hrv: 49, hrvDelta: '-9 ms', hrvColor: '#EF4444',
+    hrvPoints: '0,14 20,16 40,18 60,20 80,24 100,28 120,32 140,35',
+    rrScore: 81, hsScore: 80, bpScore: 79, icScore: 51,
+    rrFlag: true, beaconMode: false,
+    biometrics: true,
+    bmHrv: '42 ms ↓', bmSleep: '76 ↓', bmTemp: '99.2°F ↑', bmHr: '74 bpm ↑',
+    bmHrvW: 35, bmSleepW: 76, bmTempW: 65, bmHrW: 58,
+    memorySnap: true, memoryFinal: false,
+    segMorning: '', segMidday: '', segEvening: 'warning-seg',
+    gymIndicator: true,
+    fabWedges: false,
+    ollie: true,
+    ollieBanner: 'Mark — 2nd night: HRV -9ms. Sleep dropped 6 points. Go to bed at 9:20PM tonight.',
+    ollieFigure: '⚠️',
+    ollieMode: 'alert-mode',
+    ollieSpeak: true, maxSpeak: false,
+    badge: '5',
+    eduTitle: 'HRV & Sleep Connection',
+    eduSub: 'Why evening exercise shifts your recovery window.',
+  },
+  {
+    // DAY 3 — Max fires. Clinical data. Beacon takeover.
+    label: 'Day 3 — System Alert',
+    time: '08:00',
+    hrv: 42, hrvDelta: '-16 ms', hrvColor: '#EF4444',
+    hrvPoints: '0,10 20,14 40,18 60,22 80,28 100,33 120,37 140,38',
+    rrScore: 75, hsScore: 72, bpScore: 70, icScore: 51,
+    rrFlag: true, beaconMode: true,
+    takeoverScore: 79,
+    biometrics: false,
+    memorySnap: false, memoryFinal: false,
+    segMorning: '', segMidday: '', segEvening: 'danger-seg',
+    gymIndicator: false,
+    fabWedges: true,
+    ollie: true,
+    ollieBanner: 'Your insulin resistance & glucose fluctuated. Sleep + stress are affecting protein synthesis overnight.',
+    ollieFigure: '🔬',
+    ollieMode: 'max-mode',
+    bannerMode: 'max-mode',
+    ollieSpeak: false, maxSpeak: true,
+    badge: '7',
+    eduTitle: 'Recovery Compromised',
+    eduSub: 'All scores paused. Beacon is your focus now.',
+  },
+  {
+    // DAY 3B — Ollie gives instructions
+    label: 'Day 3 — Instructions',
+    time: '08:05',
+    hrv: 42, hrvDelta: '-16 ms', hrvColor: '#EF4444',
+    hrvPoints: '0,10 20,14 40,18 60,22 80,28 100,33 120,37 140,38',
+    rrScore: 75, hsScore: 72, bpScore: 70, icScore: 51,
+    rrFlag: true, beaconMode: true,
+    takeoverScore: 79,
+    biometrics: false,
+    memorySnap: false, memoryFinal: false,
+    segMorning: '', segMidday: '', segEvening: 'danger-seg',
+    gymIndicator: false,
+    fabWedges: true,
+    ollie: true,
+    ollieBanner: 'Hydrate now. Protein tonight. Exercise before 3PM only. Bed at 9:20PM — your optimal window.',
+    ollieFigure: '🫧',
+    ollieMode: 'alert-mode',
+    bannerMode: '',
+    ollieSpeak: true, maxSpeak: false,
+    badge: '7',
+    eduTitle: 'Recovery Protocol',
+    eduSub: 'Follow tonight\'s protocol. We monitor overnight.',
+  },
+  {
+    // DAY 4 — Recovery starts. Morning message from Ollie.
+    label: 'Day 4 — Recovery Begins',
+    time: '07:15',
+    hrv: 50, hrvDelta: '+8 ms', hrvColor: '#22C55E',
+    hrvPoints: '0,38 20,36 40,33 60,28 80,22 100,18 120,15 140,12',
+    rrScore: 82, hsScore: 79, bpScore: 78, icScore: 51,
+    rrFlag: false, beaconMode: false,
+    biometrics: true,
+    bmHrv: '50 ms ↑', bmSleep: '81 ↑', bmTemp: '98.4°F ✓', bmHr: '68 bpm ✓',
+    bmHrvW: 50, bmSleepW: 81, bmTempW: 45, bmHrW: 45,
+    bmHrvColor: '#22C55E', bmSleepColor: '#22C55E', bmTempColor: '#22C55E', bmHrColor: '#22C55E',
+    memorySnap: true, memoryFinal: false,
+    segMorning: 'active-seg', segMidday: '', segEvening: '',
+    gymIndicator: false,
+    fabWedges: false,
+    ollie: true,
+    ollieBanner: 'Good morning Mark! HRV +8ms. Temperature normalized. Resting HR improved. Great job last night.',
+    ollieFigure: '🌟',
+    ollieMode: 'happy-mode',
+    bannerMode: '',
+    ollieSpeak: true, maxSpeak: false,
+    badge: '3',
+    eduTitle: 'Your Recovery Worked',
+    eduSub: 'Based on your actions — one night made a difference.',
+  },
+  {
+    // DAY 5 — Stable. Light activity recommendation.
+    label: 'Day 5 — Stabilizing',
+    time: '14:30',
+    hrv: 55, hrvDelta: '+5 ms', hrvColor: '#22C55E',
+    hrvPoints: '0,38 20,34 40,28 60,22 80,16 100,12 120,10 140,8',
+    rrScore: 86, hsScore: 83, bpScore: 82, icScore: 51,
+    rrFlag: false, beaconMode: false,
+    biometrics: false,
+    memorySnap: true, memoryFinal: false,
+    segMorning: 'active-seg', segMidday: 'active-seg', segEvening: '',
+    gymIndicator: false,
+    fabWedges: false,
+    ollie: true,
+    ollieBanner: 'Your readiness improved. Do light activity today — walk or stretch. Exercise after 3PM if needed.',
+    ollieFigure: '🌱',
+    ollieMode: 'happy-mode',
+    bannerMode: '',
+    ollieSpeak: true, maxSpeak: false,
+    badge: '2',
+    eduTitle: 'Light Activity Today',
+    eduSub: 'Active recovery protects the gains you made last night.',
+  },
+  {
+    // DAY 7 — Restored. MemorySnap fires.
+    label: 'Day 7 — Restored',
+    time: '08:00',
+    hrv: 58, hrvDelta: '+3 ms', hrvColor: '#22C55E',
+    hrvPoints: '0,35 20,28 40,20 60,14 80,10 100,8 120,8 140,6',
+    rrScore: 90, hsScore: 88, bpScore: 85, icScore: 54,
+    rrFlag: false, beaconMode: false,
+    biometrics: false,
+    memorySnap: false, memoryFinal: true,
+    segMorning: 'active-seg', segMidday: 'active-seg', segEvening: 'active-seg',
+    gymIndicator: false,
+    fabWedges: false,
+    ollie: true,
+    ollieBanner: 'Mark — fully restored. Your memory now holds this pattern. Your FABs protected you.',
+    ollieFigure: '✨',
+    ollieMode: 'happy-mode',
+    bannerMode: '',
+    ollieSpeak: true, maxSpeak: false,
+    badge: '1',
+    eduTitle: 'Pattern Memorized',
+    eduSub: 'Evening exercise + poor sleep = cascade. You intercepted it.',
+  },
+];
+
+let currentDay = 0;
+let timer = null;
+let progressTimer = null;
+const DAY_DURATION = 9000; // 9 seconds per day
+
+function applyDay(idx) {
+  const d = DAYS[idx];
+
+  // Flash transition
+  const overlay = document.getElementById('dayTransition');
+  overlay.classList.add('flash');
+  setTimeout(() => overlay.classList.remove('flash'), 300);
+
+  // Day indicator
+  document.getElementById('dayLabel').textContent = d.label;
+  for (let i = 0; i < 7; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.className = 'day-dot';
+    if (i < idx) dot.classList.add('past');
+    if (i === idx) dot.classList.add('active');
+  }
+
+  // Time
+  document.getElementById('timeDisplay').textContent = d.time;
+
+  // Badge
+  document.getElementById('badgeCount').textContent = d.badge;
+
+  // HRV
+  document.getElementById('hrvValue').innerHTML = d.hrv + ' <span class="hrv-unit">ms</span>';
+  document.getElementById('hrvDelta').textContent = d.hrvDelta;
+  document.getElementById('hrvDelta').style.color = d.hrvColor;
+  document.getElementById('hrvValue').style.color = d.hrvColor;
+  document.getElementById('hrvLine').setAttribute('points', d.hrvPoints);
+  document.getElementById('hrvLine').setAttribute('stroke', d.hrvColor);
+
+  // Scores
+  document.getElementById('val-rr').textContent = d.rrScore;
+  document.getElementById('val-hs').textContent = d.hsScore;
+  document.getElementById('val-bp').textContent = d.bpScore;
+  document.getElementById('val-ic').textContent = d.icScore;
+
+  // Score tile flags
+  document.getElementById('tile-rr').className = 'score-tile' + (d.rrFlag ? ' flagged' : '');
+  if (d.beaconMode) {
+    ['tile-rr','tile-hs','tile-bp','tile-ic'].forEach(id => {
+      document.getElementById(id).style.opacity = '0.3';
+    });
+  } else {
+    ['tile-rr','tile-hs','tile-bp','tile-ic'].forEach(id => {
+      document.getElementById(id).style.opacity = '1';
+    });
+  }
+
+  // Score colors
+  const scoreColor = d.rrScore >= 85 ? '#2E7D32' : d.rrScore >= 75 ? '#F57C00' : '#B71C1C';
+  document.getElementById('val-rr').style.color = scoreColor;
+
+  // Beacon takeover with funnel animation
+  const takeover = document.getElementById('beaconTakeover');
+  const rbContent = document.getElementById('rbContent');
+  if (d.beaconMode) {
+    takeover.classList.add('active');
+    rbContent.classList.add('hidden');
+
+    // Reset all bands
+    const bandColors = ['#1B5E20','#2E7D32','#66BB6A','#F57C00','#E65100','#BF360C','#B71C1C'];
+    const bandNames = ['Strong Green','Med Green','Faint Green ⚠','Light Orange','Overload & Recovery','Dark Orange','Red — Clinical'];
+    const bandISE = ['ISE-4','ISE-4','ISE-2','ISE-2','ISE-3','ISE-1','ISE-0'];
+    const bandScores = ['95–100','85–94','80–84','70–79','65–69','60–64','<60'];
+
+    for(let b=0;b<7;b++){
+      const el = document.getElementById('band'+b);
+      el.classList.remove('lit');
+      el.style.background = `rgba(${hexToRgb(bandColors[b])},0.08)`;
+      el.style.borderColor = `rgba(${hexToRgb(bandColors[b])},0.2)`;
+      el.querySelector('.ise-band-name').textContent = bandScores[b];
+      el.querySelector('.ise-band-score:last-child').textContent = bandISE[b];
+    }
+
+    // Determine landing band from score
+    const score = d.takeoverScore || 79;
+    let landBand = 6;
+    if(score>=95) landBand=0;
+    else if(score>=85) landBand=1;
+    else if(score>=80) landBand=2;
+    else if(score>=70) landBand=3;
+    else if(score>=65) landBand=4;
+    else if(score>=60) landBand=5;
+
+    // Update score ball
+    const ball = document.getElementById('scoreBall');
+    ball.textContent = score;
+
+    // Reset ball position above funnel
+    ball.style.transition = 'none';
+    ball.style.top = '-50px';
+
+    // Animate ball: above → funnel → through bands → land
+    setTimeout(()=>{
+      // Ball drops to funnel top
+      ball.style.transition = 'top 0.6s ease-in';
+      ball.style.top = '30px';
+
+      setTimeout(()=>{
+        // Ball falls through funnel neck into bands
+        ball.style.transition = 'top 0.4s ease-in';
+        ball.style.top = '90px';
+
+        setTimeout(()=>{
+          // Ball drops through bands to landing band
+          const targetTop = 90 + (landBand * 33) + 5;
+          ball.style.transition = `top ${0.3 + landBand*0.1}s cubic-bezier(0.4,0,0.2,1)`;
+          ball.style.top = targetTop + 'px';
+
+          setTimeout(()=>{
+            // Light up the landing band
+            const landEl = document.getElementById('band'+landBand);
+            landEl.classList.add('lit');
+            landEl.style.background = bandColors[landBand];
+            landEl.style.borderColor = bandColors[landBand];
+            landEl.querySelector('.ise-band-name').textContent = bandNames[landBand];
+
+            // Ball bounces slightly
+            ball.style.transition = 'top 0.15s ease-out';
+            ball.style.top = (targetTop - 4) + 'px';
+            setTimeout(()=>{
+              ball.style.transition = 'top 0.1s ease-in';
+              ball.style.top = targetTop + 'px';
+            },150);
+
+          }, 400 + landBand*100);
+        }, 400);
+      }, 600);
+    }, 300);
+
+  } else {
+    takeover.classList.remove('active');
+    rbContent.classList.remove('hidden');
+    // Reset ball
+    const ball = document.getElementById('scoreBall');
+    ball.style.transition = 'none';
+    ball.style.top = '-50px';
+  }
+
+  // Biometrics panel
+  const bmp = document.getElementById('biometricsPanel');
+  if (d.biometrics) {
+    bmp.classList.add('visible');
+    if (d.bmHrv) {
+      document.getElementById('bm-hrv-val').textContent = d.bmHrv;
+      document.getElementById('bm-sleep-val').textContent = d.bmSleep;
+      document.getElementById('bm-temp-val').textContent = d.bmTemp;
+      document.getElementById('bm-hr-val').textContent = d.bmHr;
+      document.getElementById('bm-hrv').style.width = d.bmHrvW + '%';
+      document.getElementById('bm-sleep').style.width = d.bmSleepW + '%';
+      document.getElementById('bm-temp').style.width = d.bmTempW + '%';
+      document.getElementById('bm-hr').style.width = d.bmHrW + '%';
+      // Recovery colors
+      if (d.bmHrvColor) {
+        document.getElementById('bm-hrv').style.background = d.bmHrvColor;
+        document.getElementById('bm-hrv-val').style.color = d.bmHrvColor;
+        document.getElementById('bm-sleep').style.background = d.bmSleepColor || '#F59E0B';
+        document.getElementById('bm-sleep-val').style.color = d.bmSleepColor || '#F59E0B';
+        document.getElementById('bm-temp').style.background = d.bmTempColor || '#22C55E';
+        document.getElementById('bm-temp-val').style.color = d.bmTempColor || '#22C55E';
+        document.getElementById('bm-hr').style.background = d.bmHrColor || '#22C55E';
+        document.getElementById('bm-hr-val').style.color = d.bmHrColor || '#22C55E';
+      } else {
+        document.getElementById('bm-hrv').style.background = '#EF4444';
+        document.getElementById('bm-hrv-val').style.color = '#EF4444';
+        document.getElementById('bm-sleep').style.background = '#F59E0B';
+        document.getElementById('bm-sleep-val').style.color = '#F59E0B';
+        document.getElementById('bm-temp').style.background = '#EF4444';
+        document.getElementById('bm-temp-val').style.color = '#EF4444';
+        document.getElementById('bm-hr').style.background = '#EF4444';
+        document.getElementById('bm-hr-val').style.color = '#EF4444';
+      }
+    }
+  } else {
+    bmp.classList.remove('visible');
+  }
+
+  // Memory snap
+  document.getElementById('memorySnap').style.display = d.memorySnap ? 'block' : 'none';
+
+  // Memory final
+  const mf = document.getElementById('memoryFinal');
+  if (d.memoryFinal) {
+    mf.classList.add('visible');
+  } else {
+    mf.classList.remove('visible');
+  }
+
+  // Routine segments
+  const segs = ['morning','midday','evening'];
+  const segKeys = [d.segMorning, d.segMidday, d.segEvening];
+  segs.forEach((s, i) => {
+    const el = document.getElementById('seg-' + s);
+    el.className = 'segment ' + (segKeys[i] || '');
+  });
+
+  // Gym indicator
+  const gi = document.getElementById('gymIndicator');
+  if (d.gymIndicator) gi.classList.add('visible');
+  else gi.classList.remove('visible');
+
+  // FAB wedges
+  const fw = document.getElementById('fabWedges');
+  if (d.fabWedges) fw.classList.add('visible');
+  else fw.classList.remove('visible');
+
+  // Educational card
+  if (d.eduTitle) {
+    document.getElementById('eduTitle').textContent = d.eduTitle;
+    document.getElementById('eduSub').textContent = d.eduSub;
+  }
+
+  // Ollie panel
+  const banner = document.getElementById('ollieBanner');
+  banner.textContent = d.ollieBanner;
+  banner.className = 'ollie-banner' + (d.bannerMode ? ' ' + d.bannerMode : '');
+
+  const fig = document.getElementById('ollieFigure');
+  fig.textContent = d.ollieFigure;
+  fig.className = 'ollie-figure' + (d.ollieMode ? ' ' + d.ollieMode : '');
+
+  const ollieAv = document.getElementById('ollieAv');
+  const maxAv = document.getElementById('maxAv');
+  ollieAv.className = 'avatar-icon ollie-av' + (d.ollieSpeak ? ' speaking' : '');
+  maxAv.className = 'avatar-icon max-av' + (d.maxSpeak ? ' max-speaking' : '');
+}
+
+function startProgressBar(duration) {
+  const bar = document.getElementById('progressBar');
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  setTimeout(() => {
+    bar.style.transition = `width ${duration}ms linear`;
+    bar.style.width = '100%';
+  }, 50);
+}
+
+function nextDay() {
+  currentDay = (currentDay + 1) % DAYS.length;
+  applyDay(currentDay);
+  startProgressBar(DAY_DURATION);
+}
+
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16);
+  const g=parseInt(hex.slice(3,5),16);
+  const b=parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+let paused = false;
+
+function togglePause() {
+  paused = !paused;
+  const btn = document.getElementById('pauseBtn');
+  const hbtn = document.getElementById('headerPauseBtn');
+  if (paused) {
+    clearInterval(timer);
+    clearInterval(progressTimer);
+    if(btn) btn.textContent = '▶ Resume';
+    if(hbtn) hbtn.textContent = '▶ Demo';
+    // Show slider panel
+    document.getElementById('sliderPanel').classList.add('visible');
+  } else {
+    document.getElementById('sliderPanel').classList.remove('visible');
+    if(btn) btn.textContent = '⏸ Pause';
+    if(hbtn) hbtn.textContent = '⏸ Demo';
+    startProgressBar(DAY_DURATION);
+    timer = setInterval(nextDay, DAY_DURATION);
+  }
+}
+
+function getBandInfo(score) {
+  const bands = [
+    {min:95, max:100, color:'#1B5E20', name:'Band 1 — Strong Green'},
+    {min:85, max:94,  color:'#2E7D32', name:'Band 2 — Med Green'},
+    {min:80, max:84,  color:'#66BB6A', name:'Band 3 — Pre-Signal ⚠'},
+    {min:70, max:79,  color:'#F57C00', name:'Band 4 — Light Orange'},
+    {min:65, max:69,  color:'#E65100', name:'Band 5 — Overload & Recovery'},
+    {min:60, max:64,  color:'#BF360C', name:'Band 6 — Dark Orange'},
+    {min:0,  max:59,  color:'#B71C1C', name:'Band 7 — Red ⛔'},
+  ];
+  for(const b of bands){
+    if(score>=b.min && score<=b.max) return b;
+  }
+  return bands[6];
+}
+
+function updateSliders() {
+  const v1 = parseInt(document.getElementById('sl-v1').value);
+  const v2 = parseInt(document.getElementById('sl-v2').value);
+  const v3 = parseInt(document.getElementById('sl-v3').value);
+  const v4 = parseInt(document.getElementById('sl-v4').value);
+
+  document.getElementById('sv-v1').textContent = v1;
+  document.getElementById('sv-v2').textContent = v2;
+  document.getElementById('sv-v3').textContent = v3;
+  document.getElementById('sv-v4').textContent = v4;
+
+  // V4 slider color update
+  const v4pct = v4 + '%';
+  const v4Color = v4 < 70 ? '#B71C1C' : v4 < 85 ? '#F57C00' : '#2E7D32';
+  document.getElementById('sl-v4').style.background =
+    `linear-gradient(to right, ${v4Color} ${v4pct}, #374151 ${v4pct})`;
+  document.getElementById('sv-v4').style.color = v4Color;
+  document.getElementById('sl-v4').parentElement.querySelector('.slider-label').style.color = v4Color;
+
+  // Compute SC
+  const sc = (0.25*v1 + 0.35*v2 + 0.20*v3 + 0.20*v4);
+  const scRounded = Math.round(sc*10)/10;
+  const band = getBandInfo(Math.round(sc));
+
+  document.getElementById('scLiveVal').textContent = scRounded;
+  document.getElementById('scLiveVal').style.color = band.color;
+  document.getElementById('scBandPill').textContent = band.name;
+  document.getElementById('scBandPill').style.background = band.color;
+
+  // Update score tiles live
+  const scoreColor = sc >= 85 ? '#2E7D32' : sc >= 75 ? '#F57C00' : '#B71C1C';
+  document.getElementById('val-rr').textContent = Math.round(sc);
+  document.getElementById('val-rr').style.color = scoreColor;
+
+  // If score drops to pre-signal — trigger beacon
+  if(sc < 85 && sc >= 80) {
+    document.getElementById('ollieBanner').textContent =
+      'Mark — your score just entered pre-signal zone. This is what we are detecting.';
+    document.getElementById('ollieBanner').style.color = '#F57C00';
+  } else if(sc < 80) {
+    document.getElementById('ollieBanner').textContent =
+      'Mark — score dropped to ' + Math.round(sc) + '. Clinical intersection approaching.';
+    document.getElementById('ollieBanner').style.color = '#EF4444';
+    // Trigger beacon takeover for dramatic effect
+    const takeover = document.getElementById('beaconTakeover');
+    const rbContent = document.getElementById('rbContent');
+    takeover.classList.add('active');
+    rbContent.classList.add('hidden');
+    // Update ball score
+    document.getElementById('scoreBall').textContent = Math.round(sc);
+    // Light correct band
+    const bandColors = ['#1B5E20','#2E7D32','#66BB6A','#F57C00','#E65100','#BF360C','#B71C1C'];
+    const bandNames = ['Strong Green','Med Green','Faint Green ⚠','Light Orange','Overload & Recovery','Dark Orange','Red — Clinical ⛔'];
+    let landBand = 6;
+    if(sc>=95) landBand=0; else if(sc>=85) landBand=1;
+    else if(sc>=80) landBand=2; else if(sc>=70) landBand=3;
+    else if(sc>=65) landBand=4; else if(sc>=60) landBand=5;
+    for(let b=0;b<7;b++){
+      const el=document.getElementById('band'+b);
+      el.classList.remove('lit');
+      el.style.background=`rgba(${hexToRgb(bandColors[b])},0.08)`;
+      el.style.borderColor=`rgba(${hexToRgb(bandColors[b])},0.2)`;
+      el.querySelector('.ise-band-name').textContent=el.querySelector('.ise-band-score').textContent;
+    }
+    const landEl=document.getElementById('band'+landBand);
+    landEl.classList.add('lit');
+    landEl.style.background=bandColors[landBand];
+    landEl.querySelector('.ise-band-name').textContent=bandNames[landBand];
+    // Position ball on correct band
+    const ball=document.getElementById('scoreBall');
+    ball.style.transition='top 0.5s ease';
+    ball.style.top=(90+landBand*33+5)+'px';
+  } else {
+    // Score in green — restore normal view
+    document.getElementById('beaconTakeover').classList.remove('active');
+    document.getElementById('rbContent').classList.remove('hidden');
+    document.getElementById('ollieBanner').style.color = '';
+    document.getElementById('ollieBanner').textContent =
+      'Mark — great. Keep V4 (GLP-1) in the green zone.';
+  }
+}
+
+// Show pause button always
+document.addEventListener('DOMContentLoaded', ()=>{
+  // pause button visible in header area
+});
+
+// Initialize
+applyDay(0);
+startProgressBar(DAY_DURATION);
+timer = setInterval(nextDay, DAY_DURATION);
+</script>
+</body>
+</html>
