@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Beacon — Seven Bands (Pure)</title>
+<style>
+  :root {
+    --b1: #0d6b2a;  /* Deep Green */
+    --b2: #3ba03e;  /* Green */
+    --b3: #9dc64d;  /* Faint Green */
+    --b4: #d4ecb0;  /* Very Light Green */
+    --b5: #ef8a17;  /* Orange */
+    --b6: #d63d34;  /* Red */
+    --b7: #8f1a14;  /* Dark Red */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .band {
+    flex: 1;
+    width: 100%;
+    position: relative;
+    opacity: 0;
+    transform: translateY(-12px);
+    animation: slideDown 0.9s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  }
+
+  /* Subtle inner highlight for depth — very gentle */
+  .band::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.08) 100%);
+    pointer-events: none;
+  }
+
+  .band.b1 { background: var(--b1); animation-delay: 0.05s; }
+  .band.b2 { background: var(--b2); animation-delay: 0.14s; }
+  .band.b3 { background: var(--b3); animation-delay: 0.23s; }
+  .band.b4 { background: var(--b4); animation-delay: 0.32s; }
+  .band.b5 { background: var(--b5); animation-delay: 0.41s; }
+  .band.b6 { background: var(--b6); animation-delay: 0.50s; }
+  .band.b7 { background: var(--b7); animation-delay: 0.59s; }
+
+  @keyframes slideDown {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="stack">
+    <div class="band b1"></div>
+    <div class="band b2"></div>
+    <div class="band b3"></div>
+    <div class="band b4"></div>
+    <div class="band b5"></div>
+    <div class="band b6"></div>
+    <div class="band b7"></div>
+  </div>
+</body>
+</html>
