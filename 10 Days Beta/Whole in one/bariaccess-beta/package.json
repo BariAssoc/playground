@@ -1,0 +1,24 @@
+{
+  "name": "bariaccess-beta",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BariAccess Beta May 7-17, 2026 cohort developer pack",
+  "workspaces": [
+    "packages/shared",
+    "packages/backend",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "dev:backend": "npm run dev -w @bariaccess/backend",
+    "dev:frontend": "npm run dev -w @bariaccess/frontend",
+    "seed:cohort": "npm run seed:cohort -w @bariaccess/backend",
+    "seed:fabs": "npm run seed:fabs -w @bariaccess/backend",
+    "job:nightly": "npm run job:nightly -w @bariaccess/backend",
+    "job:day11": "npm run job:day11 -w @bariaccess/backend"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

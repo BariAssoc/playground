@@ -1,0 +1,33 @@
+{
+  "name": "@bariaccess/backend",
+  "version": "0.1.0",
+  "main": "./dist/api/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "ts-node-dev --respawn --transpile-only src/api/index.ts",
+    "start": "node dist/api/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "seed:cohort": "ts-node src/storage/seed-cohort.ts",
+    "seed:fabs": "ts-node src/storage/seed-fabs.ts",
+    "job:nightly": "ts-node src/jobs/nightly-compute.ts",
+    "job:day11": "ts-node src/jobs/day11-report.ts",
+    "job:disengagement": "ts-node src/jobs/disengagement-runner.ts"
+  },
+  "dependencies": {
+    "@azure/cosmos": "^4.1.0",
+    "@bariaccess/shared": "0.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
