@@ -1,0 +1,22 @@
+{
+  "name": "bariaccess-lite-devpack",
+  "private": true,
+  "version": "0.1.3",
+  "description": "BariAccess Lite — Sleep / Stress / Activity / R&R_Lite scoring engine + Lite Beta UI. For Zakiy Manigo, May 11, 2026.",
+  "workspaces": [
+    "packages/shared",
+    "packages/backend",
+    "packages/ui"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=@bariaccess-lite/shared && npm run build --workspace=@bariaccess-lite/backend && npm run build --workspace=@bariaccess-lite/ui",
+    "test": "npm run build --workspace=@bariaccess-lite/shared && npm run test --workspace=@bariaccess-lite/backend && npm run test --workspace=@bariaccess-lite/ui",
+    "typecheck": "npm run build --workspace=@bariaccess-lite/shared && npm run typecheck --workspace=@bariaccess-lite/backend && npm run typecheck --workspace=@bariaccess-lite/ui",
+    "dev:ui": "npm run dev --workspace=@bariaccess-lite/ui",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "license": "UNLICENSED"
+}
